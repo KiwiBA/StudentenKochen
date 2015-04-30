@@ -32,4 +32,3 @@ class Recipeingredients(models.Model):
     
     def __str__(self):
         return self.ingredient + " is ingredient of " + self.recipe
-
