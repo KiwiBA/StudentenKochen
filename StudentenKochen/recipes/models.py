@@ -12,13 +12,13 @@ class Ingredient(models.Model):
     
 class Recipe(models.Model):
     id = models.AutoField(primary_key=True)
-    receptname = models.CharField(max_length=200)
+    recipename = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
     ingredients = models.ManyToManyField(Ingredient, through='Recipeingredients')
     description = models.CharField(max_length=20000)
     
     def __str__(self):
-        return self.receptname
+        return self.recipename
     
     # returns true if recipes is published within the last 24 hours.
     def was_published_recently(self):

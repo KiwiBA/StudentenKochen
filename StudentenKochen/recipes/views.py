@@ -1,4 +1,5 @@
 from django.http import HttpResponse
 
-def myFirstView(request):
-    return HttpResponse("Hello world!")
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the polls index.")

@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             name='Recipe',
             fields=[
                 ('id', models.AutoField(serialize=False, primary_key=True)),
-                ('receptname', models.CharField(max_length=200)),
+                ('recipename', models.CharField(max_length=200)),
                 ('pub_date', models.DateTimeField(verbose_name='date published')),
                 ('description', models.CharField(max_length=20000)),
             ],
@@ -32,11 +32,11 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(serialize=False, primary_key=True)),
                 ('quantity', models.CharField(max_length=30)),
                 ('ingredient', models.ForeignKey(to='recipes.Ingredient')),
-                ('recipes', models.ForeignKey(to='recipes.Recipe')),
+                ('recipe', models.ForeignKey(to='recipes.Recipe')),
             ],
         ),
         migrations.AddField(
-            model_name='recipes',
+            model_name='recipe',
             name='ingredients',
             field=models.ManyToManyField(to='recipes.Ingredient', through='recipes.Recipeingredients'),
         ),

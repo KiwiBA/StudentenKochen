@@ -1,6 +1,7 @@
-from django.conf.urls.defaults import *
-from django.conf.urls import patterns
+from django.conf.urls import url
 
-urlpatterns = patterns('recipes.views',
-(r'', 'myFirstView'),
-)
+from . import views
+
+urlpatterns = [
+    url(r'^$', views.index, name='index'),
+]
