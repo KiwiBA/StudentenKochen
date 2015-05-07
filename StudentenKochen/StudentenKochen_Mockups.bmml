@@ -1,0 +1,74 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1095" measuredH="469" mockupW="850" mockupH="461">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="245" y="8" w="850" h="461" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Studenten%20kochen%0Ahttp%3A//StudentenKochen.de</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Button" x="941" y="209" w="97" h="27" measuredW="94" measuredH="27" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Registrieren</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::TextInput" x="941" y="111" w="97" h="-1" measuredW="73" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>0</borderColor>
+        <state>up</state>
+        <text>username</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::TextInput" x="941" y="138" w="97" h="-1" measuredW="71" measuredH="27" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>password</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Button" x="984" y="165" w="-1" h="-1" measuredW="54" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Login</text>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="499" y="111" w="-1" h="-1" measuredW="300" measuredH="40" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>32</size>
+        <text>StudentenKochen.de</text>
+        <textOrientation>right</textOrientation>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Button" x="277" y="236" w="129" h="27" measuredW="101" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Zufallsrezept</text>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::SearchBox" x="277" y="166" w="129" h="-1" measuredW="120" measuredH="25" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Suche...</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Button" x="277" y="200" w="129" h="27" measuredW="124" measuredH="27" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>erweiterte%20Suche</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::TagCloud" x="929" y="251" w="164" h="164" measuredW="350" measuredH="110" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Kuchen%20Suppe%20Abendessen%20Nachspeise%20Fastfood%20Party%20Torte%20Fr%FChst%FCck%20fettarm%20%20Mittagessen</text>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Label" x="455" y="171" w="-1" h="-1" measuredW="185" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Die%20neuesten%20Rezepte%20f%FCr%20Dich%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::HRule" x="424" y="154" w="495" h="-1" measuredW="100" measuredH="10" zOrder="11" locked="false" isInGroup="-1"/>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::VRule" x="414" y="165" w="-1" h="257" measuredW="10" measuredH="100" zOrder="12" locked="false" isInGroup="-1"/>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::VRule" x="919" y="165" w="-1" h="257" measuredW="10" measuredH="100" zOrder="13" locked="false" isInGroup="-1"/>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::DataGrid" x="444" y="210" w="455" h="154" measuredW="385" measuredH="155" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <hasHeader>false</hasHeader>
+        <text>%5BPfannkuchen%5D%2C%20user35%2C%2007.05.15%2C%204.3%0A%5BNudeln%20mit%20Tomatenso%DFe%5D%2C%20superkoch321%2C%2007.05.15%20%2C%202.4%0A%5BErdbeersmoothie%5D%2C%20user35%2C%2006.05.15%2C%203.7%0A%5BVegetarische%20Burger%5D%2C%20veggifreak7%2C%2006.05.15%2C%203.0%0A%5BKirschkuchen%5D%2C%20studentkocht9%2C%2005.05.15%2C%204.5%0A%7B65L%2C%200C%2C%2035C%2C%200C%7D</text>
+        <vLines>false</vLines>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
