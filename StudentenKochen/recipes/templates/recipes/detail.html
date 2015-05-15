@@ -1,4 +1,4 @@
-<h1>{{ recipe.recipename}}</h1>
+<h1>Rezept: {{recipe.recipename}}</h1>
 <ul>
 {% for ingredient in recipe.ingredients.all %}
     <li>{{ ingredient.name }}</li>

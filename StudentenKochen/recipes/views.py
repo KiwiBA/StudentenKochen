@@ -14,4 +14,5 @@ def index(request):
 
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
+    recipename = recipe.recipename
     return render(request, 'recipes/detail.html', {'recipe': recipe})
