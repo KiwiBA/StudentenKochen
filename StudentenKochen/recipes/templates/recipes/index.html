@@ -1,3 +1,6 @@
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'recipes/style.css' %}" />
+
 {% if latest_recipe_list %}
     <ul>
     {% for recipe in latest_recipe_list %}
@@ -7,3 +10,5 @@
 {% else %}
     <p>No recipe are available.</p>
 {% endif %}
+<br>
+<a href="{% url 'recipes:create' %}">Neues Rezept</a>

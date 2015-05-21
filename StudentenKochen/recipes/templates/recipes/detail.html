@@ -1,6 +1,26 @@
 <h1>Rezept: {{recipe.recipename}}</h1>
+
+
 <ul>
 {% for ingredient in recipe.ingredients.all %}
     <li>{{ ingredient.name }}</li>
 {% endfor %}
 </ul>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'recipes:detail' recipe.id %}" method="post">
+{% csrf_token %}
+<input type="radio" name="rating" value="1" />1
+<br />
+<input type="radio" name="rating" value="2" />2
+<br />
+<input type="radio" name="rating" value="3" />3
+<br />
+<input type="radio" name="rating" value="4" />4
+<br />
+<input type="radio" name="rating" value="5" />5
+<br />
+<input type="submit" value="Bewerten" />
+</form>
+
