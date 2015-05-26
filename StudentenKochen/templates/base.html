@@ -1,0 +1,19 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{% block title %}Startseite{% endblock %} - Testprojekt</title>
+</head>
+<body>
+<ul id="menu">
+    <a href="/">Start</a> <a href="/recipes/">Recipe</a>
+</ul>
+
+<div id="pageContainer>
+	<div id="nav_top_right">
+		{% if not user.is_authenticated %}<p><a href="/logout/">Logout</a></p>{% else %}<p><a href="/login/">Login</a></p>{% endif %}
+	</div>
+	{% block content %}
+	{% endblock %}
+</div>
+</body>
+</html>
