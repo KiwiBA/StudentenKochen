@@ -1,4 +1,5 @@
-from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from django.shortcuts import get_object_or_404, render
 from django.core.urlresolvers import reverse
@@ -6,6 +7,7 @@ from django.utils import timezone
 from django.views import generic
 
 from .models import Recipe, Rating
+from recipes.forms import RecipeForm
 
 class IndexView(generic.ListView):
     template_name = 'recipes/index.html'
@@ -32,5 +34,29 @@ class DetailView(generic.DetailView):
 #     recipename = recipe.recipename
 #     return render(request, 'recipes/detail.html', {'recipe': recipe})
 
+@login_required
 def create(request):
-    return render(request, 'recipes/create.html')
+    if request.method == 'POST':
+        form = RecipeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            recipe = form.save()
+            return HttpResponseRedirect(recipe.get_absolute_url())
+    else:
+        form = RecipeForm()
+    return render(request, 'recipes/create.html',
+        {'form': form, 'add': True})
+
+@login_required
+def edit(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    if recipe.author != request.user and not request.user.is_staff:
+        return HttpResponseForbidden()
+    if request.method == 'POST':
+        form = RecipeForm(instance=recipe, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(recipe.get_absolute_url())
+    else:
+        form = RecipeForm(instance=recipe)
+    return render(request, 'recipes/create.html',
+        {'form': form, 'add': False, 'object': recipe})

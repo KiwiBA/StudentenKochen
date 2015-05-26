@@ -40,11 +40,19 @@ class Recipe(models.Model):
         now = timezone.now()
         return  now - datetime.timedelta(days=1) <= self.pub_date <= now
     
+    @models.permalink
+    def get_absolute_url(self):
+        return ('recipes:detail', (), {'pk': self.id})
+
+
+    
 class Recipeingredients(models.Model):
     id = models.AutoField(primary_key=True)
     ingredient = models.ForeignKey(Ingredient)
     recipe = models.ForeignKey(Recipe)
     quantity = models.CharField(max_length=30)
+    class Meta:
+        auto_created = True
     
     def __str__(self):
         return self.ingredient.name + " is ingredient of " + self.recipe.recipename
