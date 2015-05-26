@@ -2,6 +2,7 @@
 {% block content %}
 <h1>Rezept: {{recipe.recipename}}</h1>
 
+<a href="{% url 'recipes:edit' recipe.id %}">Rezept bearbeiten</a>
 
 <ul>
 {% for ingredient in recipe.ingredients.all %}
