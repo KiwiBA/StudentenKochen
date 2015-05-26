@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import Person
 from .models import Tag
 from recipes.models import Ingredient
 from .models import Recipe
@@ -12,7 +11,7 @@ class IngredientsInline(admin.TabularInline):
     extra = 3
 
 class RecipeAdmin(admin.ModelAdmin):
-    fields = ['recipename', 'author', 'pub_date', 'description', 'tags']
+    fields = ['recipename', 'author', 'description', 'tags']
     inlines = [IngredientsInline]
     
     list_display = ('id', 'recipename', 'author', 'pub_date')
@@ -24,16 +23,12 @@ class CommentAdmin(admin.ModelAdmin):
 class RatingAdmin(admin.ModelAdmin):
     list_display = ('id', 'recipe', 'evaluator', 'rating')
     
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'email', 'pw')
-    
 class TagAdmin(admin.ModelAdmin):
     list_display = ('id', 'tagname')
     
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')    
 
-admin.site.register(Person, PersonAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)

@@ -2,15 +2,7 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
-
-class Person(models.Model):
-    id = models.AutoField(primary_key=True)
-    email = models.EmailField(max_length=254, null=True, unique=True)
-    username = models.CharField(max_length=200)
-    pw = models.CharField(max_length=200)
-    
-    def __str__(self):
-        return self.email + " --- " + self.username
+from user_auth.models import Student
 
 class Ingredient(models.Model):
     id = models.AutoField(primary_key=True)
@@ -29,11 +21,16 @@ class Tag(models.Model):
 class Recipe(models.Model):
     id = models.AutoField(primary_key=True)
     recipename = models.CharField(max_length=200)
-    author = models.ForeignKey(Person, null=True)
-    pub_date = models.DateTimeField('date published')
+    author = models.ForeignKey(Student, null=True)
+    pub_date = models.DateTimeField('date published', editable=False)
     ingredients = models.ManyToManyField(Ingredient, through='Recipeingredients')
     description = models.CharField(max_length=20000)
     tags = models.ManyToManyField(Tag)
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.pub_date= timezone.now()
+        super(Recipe, self).save(*args, **kwargs)
     
     def __str__(self):
         return self.recipename
@@ -55,7 +52,7 @@ class Recipeingredients(models.Model):
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     recipe = models.ForeignKey(Recipe)
-    author = models.ForeignKey(Person)
+    author = models.ForeignKey(Student)
     comment = models.CharField(max_length=2000)
     
     def __str__(self):
@@ -63,7 +60,7 @@ class Comment(models.Model):
     
 class Rating(models.Model):
     id = models.AutoField(primary_key=True)
-    evaluator = models.ForeignKey(Person)
+    evaluator = models.ForeignKey(Student)
     recipe = models.ForeignKey(Recipe)
     RATING_CHOICES = (
         (1, 1),
