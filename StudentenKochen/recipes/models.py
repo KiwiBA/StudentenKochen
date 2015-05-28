@@ -42,7 +42,7 @@ class Recipe(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('recipes:detail', (), {'pk': self.id})
+        return ('recipes:detail', (), {'recipe_id': self.id})
 
 
     
