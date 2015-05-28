@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-{% block content %}
-{% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'recipes/style.css' %}" />
 
+{% load staticfiles %}
+
+{% block content %}
+<h1>Rezepte</h1>
 {% if latest_recipe_list %}
     <ul>
     {% for recipe in latest_recipe_list %}
