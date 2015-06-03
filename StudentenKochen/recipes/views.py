@@ -8,6 +8,7 @@ from django.views import generic
 
 from .models import Recipe, Rating, Comment
 from recipes.forms import RecipeForm
+from recipes.models import Recipeingredients
 
 class IndexView(generic.ListView):
     template_name = 'recipes/index.html'
@@ -15,22 +16,12 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published recipes."""
-        return Recipe.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
-    
-# def index(request):
-#     latest_recipe_list = Recipe.objects.order_by('-pub_date')[:2]
-#     template = loader.get_template('recipes/index.html')
-#     context = RequestContext(request, {
-#         'latest_recipe_list': latest_recipe_list,
-#     })
-#     return HttpResponse(template.render(context))
-
-# class DetailView(generic.DetailView):
-#     model = Recipe
-#     template_name = 'recipes/detail.html'
+        return Recipe.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:20]
     
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
+    
+    #compute the rating average of the recipe
     ratings = Rating.objects.all().filter(recipe=recipe)
     all_ratings = 0
     count = 0
@@ -41,7 +32,19 @@ def detail(request, recipe_id):
         rating_average = 0
     else:
         rating_average = all_ratings/count
-    return render(request, 'recipes/detail.html', {'recipe': recipe, 'ratings': rating_average})
+        
+    #check if current user rated the recipe already and return the rating the user gave    
+    ratingOfCurrentUser = 0
+    try:
+        userRating = ratings.filter(evaluator=request.user.student)[:1].get()
+    except (KeyError, Rating.DoesNotExist):
+        ratingOfCurrentUser = 0
+    else:
+        ratingOfCurrentUser = userRating.rating
+    
+    #ingredients of the recipe
+    recipeIngredients = Recipeingredients.objects.filter(recipe=recipe)
+    return render(request, 'recipes/detail.html', {'recipe': recipe, 'ratings': rating_average, 'ratingOfCurrentUser': ratingOfCurrentUser, 'recipeIngredients': recipeIngredients})
 
 @login_required
 def create(request):
@@ -74,24 +77,12 @@ def edit(request, recipe_id):
 def rate(request, recipe_id):
     p = get_object_or_404(Recipe, pk=recipe_id)
 #     try:
+
     new_rating = Rating()
     new_rating.recipe = p
     new_rating.evaluator = request.user.student
     new_rating.rating = request.POST['rating']
     new_rating.save()
-#         selected_choice = p.choice_set.get(pk=request.POST['choice'])
-#     except (KeyError, Choice.DoesNotExist):
-#         # Redisplay the question voting form.
-#         return render(request, 'polls/detail.html', {
-#             'question': p,
-#             'error_message': "You didn't select a choice.",
-#         })
-#     else:
-#         selected_choice.votes += 1
-#         selected_choice.save()
-#         # Always return an HttpResponseRedirect after successfully dealing
-#         # with POST data. This prevents data from being posted twice if a
-#         # user hits the Back button.
     return HttpResponseRedirect(p.get_absolute_url())
 
 @login_required    
@@ -108,3 +99,6 @@ def comment(request, recipe_id):
         comment.recipe = recipe
         comment.save()
     return HttpResponseRedirect(recipe.get_absolute_url())
+
+def search(request):
+    return

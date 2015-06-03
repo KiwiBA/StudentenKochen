@@ -19,6 +19,7 @@
 <form action="{{ action_url }}" method="post" accept-charset="utf-8">
     {{ form.as_p }}
     {% csrf_token %}
+    
     <p><input type="submit" value="Speichern"/></p>
 </form>
 <a href="{% url 'recipes:index' %}">zurueck zur Uebersicht</a>
