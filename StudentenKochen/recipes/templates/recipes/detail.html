@@ -24,9 +24,14 @@ $(document).ready( function() {
 <p>{{recipe.description}}</p>
 <p>Autor: {{recipe.author}}</p>
 <ul>
+<p>Tags:</p>
+{% for tag in recipe.tags.all %}
+    <li>{{tag.tagname}}</li>
+{% endfor %}
 <p>Ratings:</p>
 {{ ratings}}
 </ul>
+
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
