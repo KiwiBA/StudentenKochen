@@ -44,6 +44,7 @@ class Recipe(models.Model):
     def get_absolute_url(self):
         return ('recipes:detail', (), {'recipe_id': self.id})
 
+
     
 class Recipeingredients(models.Model):
     id = models.AutoField(primary_key=True)
