@@ -41,10 +41,11 @@ def detail(request, recipe_id):
         ratingOfCurrentUser = 0
     else:
         ratingOfCurrentUser = userRating.rating
-    
+    #get all comments of current recipe
+    comments = Comment.objects.filter(recipe=recipe)
     #ingredients of the recipe
     recipeIngredients = Recipeingredients.objects.filter(recipe=recipe)
-    return render(request, 'recipes/detail.html', {'recipe': recipe, 'ratings': rating_average, 'ratingOfCurrentUser': ratingOfCurrentUser, 'recipeIngredients': recipeIngredients})
+    return render(request, 'recipes/detail.html', {'recipe': recipe, 'ratings': rating_average, 'ratingOfCurrentUser': ratingOfCurrentUser, 'recipeIngredients': recipeIngredients, 'comments':comments})
 
 @login_required
 def create(request):

@@ -1,57 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
-<script>
-$(document).ready( function() {
+	<h1>{{recipe.recipename}}</h1>
 
-    $("#button").click( function(event) {
-        alert("You clicked the button using JQuery!");
-    });
-});
-</script>
-
-
-
-<h1>{{recipe.recipename}}</h1>
-
-<a href="{% url 'recipes:edit' recipe.id %}">Rezept bearbeiten</a>
-<p>Zutaten:</p>
-<ul>
-{% for recipeIngredient in recipeIngredients.all %}
-    <li>{{recipeIngredient}}</li>
-{% endfor %}
-</ul>
-<p>Zubereitung:</p>
-<p>{{recipe.description}}</p>
-<p>Autor: {{recipe.author}}</p>
-<ul>
-<p>Ratings:</p>
-{{ ratings}}
-</ul>
-
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+	<a href="{% url 'recipes:edit' recipe.id %}">Rezept bearbeiten</a>
+	<p>Zutaten:</p>
+	<ul>
+		{% for recipeIngredient in recipeIngredients.all %}
+		    <li>{{recipeIngredient}}</li>
+		{% endfor %}
+		</ul>
+		<p>Zubereitung:</p>
+		<p>{{recipe.description}}</p>
+		<p>Autor: {{recipe.author}}</p>
+		<ul>
+		<p>Ratings:</p>
+		{{ ratings}}
+	</ul>
 
 {% if user.is_authenticated %}
-
 	{% if not recipe.author == user.student  and ratingOfCurrentUser == 0%}
-		
 		<form action="{% url 'recipes:rate' recipe.id %}" method="post">
 		{% csrf_token %}
 		<input type="radio" name="rating" value="1" />1
-		<br />
 		<input type="radio" name="rating" value="2" />2
-		<br />
 		<input type="radio" name="rating" value="3" />3
-		<br />
 		<input type="radio" name="rating" value="4" />4
-		<br />
 		<input type="radio" name="rating" value="5" />5
-		<br />
 		<input type="submit" value="Bewerten" />
 		</form>
 	{% endif %}
 	{% if not ratingOfCurrentUser == 0%}
 		<p>Deine Bewertung zum Rezept ist {{ratingOfCurrentUser}}.</p>
 	{% endif %}
+<ul>
+ {% for comment in comments%}
+    <p>{{comment.author}} schrieb: {{comment.comment}}</p>
+ {% endfor %}    
+</ul>
 
 <form action="{% url 'recipes:comment' recipe.id %}" method="post"> 
 	{% csrf_token %}
