@@ -9,6 +9,7 @@ from django.views import generic
 from .models import Recipe, Rating, Comment
 from recipes.forms import RecipeForm
 from recipes.models import Recipeingredients
+from _overlapped import NULL
 
 class IndexView(generic.ListView):
     template_name = 'recipes/index.html'
@@ -20,11 +21,11 @@ class IndexView(generic.ListView):
     
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
-    
     #compute the rating average of the recipe
     ratings = Rating.objects.all().filter(recipe=recipe)
     all_ratings = 0
     count = 0
+    ratingOfCurrentUser = NULL
     for rating in ratings:
         all_ratings += rating.rating
         count +=1
@@ -33,18 +34,19 @@ def detail(request, recipe_id):
     else:
         rating_average = all_ratings/count
         
-    #check if current user rated the recipe already and return the rating the user gave    
-    ratingOfCurrentUser = 0
-    try:
-        userRating = ratings.filter(evaluator=request.user.student)[:1].get()
-    except (KeyError, Rating.DoesNotExist):
-        ratingOfCurrentUser = 0
-    else:
-        ratingOfCurrentUser = userRating.rating
+    if request.user.is_authenticated(): 
+        #check if current user rated the recipe already and return the rating the user gave    
+        try:
+            userRating = ratings.filter(evaluator=request.user.student)[:1].get()
+        except (KeyError, Rating.DoesNotExist):
+            ratingOfCurrentUser = 0
+        else:
+            ratingOfCurrentUser = userRating.rating
     #get all comments of current recipe
     comments = Comment.objects.filter(recipe=recipe)
     #ingredients of the recipe
     recipeIngredients = Recipeingredients.objects.filter(recipe=recipe)
+    
     return render(request, 'recipes/detail.html', {'recipe': recipe, 'ratings': rating_average, 'ratingOfCurrentUser': ratingOfCurrentUser, 'recipeIngredients': recipeIngredients, 'comments':comments})
 
 @login_required
@@ -53,53 +55,60 @@ def create(request):
         form = RecipeForm(user=request.user, data=request.POST)
         if form.is_valid():
             recipe = form.save()
+            
             return HttpResponseRedirect(recipe.get_absolute_url())
     else:
         form = RecipeForm()
-    return render(request, 'recipes/create.html',
-        {'form': form, 'add': True})
+        
+    return render(request, 'recipes/create.html', {'form': form, 'add': True})
 
 @login_required
 def edit(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
     if recipe.author != request.user.student and not request.user.is_staff:
+        
         return HttpResponseForbidden()
+    
     if request.method == 'POST':
         form = RecipeForm(instance=recipe, data=request.POST)
         if form.is_valid():
             form.save()
+            
             return HttpResponseRedirect(recipe.get_absolute_url())
     else:
         form = RecipeForm(instance=recipe)
+        
     return render(request, 'recipes/create.html',
         {'form': form, 'add': False, 'object': recipe})
 
 @login_required     
 def rate(request, recipe_id):
     p = get_object_or_404(Recipe, pk=recipe_id)
-#     try:
-
     new_rating = Rating()
     new_rating.recipe = p
     new_rating.evaluator = request.user.student
     new_rating.rating = request.POST['rating']
     new_rating.save()
+    
     return HttpResponseRedirect(p.get_absolute_url())
 
 @login_required    
 def comment(request, recipe_id):
-    print("COmment")
     if request.method == 'POST':
         comment = Comment()
         comment.author = request.user.student
         comment.comment= request.POST.get('comment', '')
-        #recipe_id = request.POST.get('recipe_id', '')
-        print(recipe_id)
-        print("comment" + comment.comment)
         recipe = Recipe.objects.get(id=recipe_id)
         comment.recipe = recipe
         comment.save()
+        
     return HttpResponseRedirect(recipe.get_absolute_url())
 
-def search(request):
-    return
+def ownRecipes(request):
+    author = request.user.student
+    print(author.name)
+    recipes= Recipe.objects.filter(author=author)
+    
+    return render(request, 'recipes/ownRecipe.html', {'recipe_list': recipes})
+
+

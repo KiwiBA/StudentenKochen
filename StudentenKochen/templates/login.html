@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="" method="post">
-{%csrf_token %}
-{% if form.errors %}<p>Bitte verbessere die folgenden Felder:</p>{% endif %}
-<div class="register_div">
-	{% if form.username.errors %}<p class="error">{{form.username.errors }}</p> {%endif %}
-	<p><label for="username" {%if form.username.errors %} class="error" {%endif %}>Username:</label></p>
-	<p>{{form.username}}</p>
-</div>
+<div class="hero-unit">
+    <h3>Login</h3>
 
-<div class="register_div">
-	{% if form.password.errors %}<p class="error">{{ form.password.errors}}</p>{% endif %}
-	<p><label for="password" {%if form.password.errors %} class="error" {%endif %}>Passwort:</label></p>
-	<p>{{form.password}}</p>
+    <div class="container">
+    <form class="form-signin span4" id="login_form" method="post" action="">
+        {% csrf_token %}
+
+        {% if form.errors %}<p><strong>Bitte verbessere die folgenden Felder:</strong></p>{% endif %}
+        Username: <input type="text" class="input-block-level" placeholder="Username" name="username" value="" size="50" />
+        <br />
+        Password: <input type="password" class="input-block-level" placeholder="Password" name="password" value="" size="50" />
+        <br />
+        <button class="btn btn-primary" type="submit">Sign in</button>
+    </form>
+
+    </div>
+    <!-- /container -->
 </div>
-<p><input type="submit" alt="register" /></p>
-</form>
 {% endblock %}

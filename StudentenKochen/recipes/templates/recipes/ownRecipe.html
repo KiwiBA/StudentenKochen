@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+	<h1>Meine erstellten Rezepte</h1>
+	
+	{% if recipe_list %}
+ 	<ul class="recipes">
+	    {% for recipe in recipe_list %}
+	    	<a href="{% url 'recipes:detail' recipe.id %}">{{ recipe.recipename }}</a><br />
+	    {% endfor %}
+		</ul>
+	{% else %}
+    	<p>No recipe are available.</p>
+	{% endif %}
+{% endblock %}
