@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404, render
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.views import generic
+from django.db.models import Q #for complex queries
+import re #regular expressions
 
 from .models import Recipe, Rating, Comment
 from recipes.forms import RecipeForm
@@ -111,4 +113,37 @@ def ownRecipes(request):
     
     return render(request, 'recipes/ownRecipe.html', {'recipe_list': recipes})
 
+def search(request):
+    query_string = ''
+    found_entries = None
+    
+    
+    if ('q' in request.GET) and request.GET['q'].strip():
+        query_string = request.GET['q']
+        
+        unordered_query = make_query(query_string, ['recipename', 'description', 'tags.tagname', 'ingredients.name'])         
+        found_entries = Recipe.objects.filter(unordered_query).order_by('-pub_date')
 
+    return render(request, 'recipes/search.html', {'query_string': query_string, 'found_entries': found_entries})
+
+def make_query(query_string, search_fields):
+    #regular expressions um die suchwoerter zu trennen
+    findterms = re.compile(r'"([^"]+)"|(\S+)').findall
+    normspace=re.compile(r'\s{2,}').sub
+    terms = [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)]
+    
+    query = None # Query to search for every search term 
+    for term in terms:
+        or_query = None # Query to search for a given term in each field
+        for field_name in search_fields:
+            field_name = field_name.replace(".", "__") #ersetze den punkt mit __ um auch in fremdschluesseln zu suchen
+            q = Q(**{"%s__icontains" % field_name: term})
+            if or_query is None:
+                or_query = q
+            else:
+                or_query = or_query | q
+        if query is None:
+            query = or_query
+        else:
+            query = query & or_query
+    return query
