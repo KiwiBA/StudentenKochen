@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+	<h2>Erweiterte Suche</h2>
+	<form action="{% url 'recipes:extendedSearch' %}" method="get">
+		<lable for="searchBoxTitle" style="float:left; display:block; width:15%;">Rezeptname:</lable>
+		<input type="text" id="searchBoxTitle" class="form-control" name="title" placeholder="im Titel suchen">
+		<br>
+		<lable for="searchBoxIngredient" style="float:left; display:block; width:15%;">Zutaten:</lable>
+		<input type="text" id="searchBoxIngredient" class="form-control" name="ingredient" placeholder="in Zutaten suchen">
+		<br>
+		<lable for="searchBoxTag" style="float:left; display:block; width:15%;">Tags:</lable>
+		<input type="text" id="searchBoxTag" class="form-control" name="tag" placeholder="in Tags suchen">	
+		<br>
+		<lable for="searchBoxAuthor" style="float:left; display:block; width:15%;">Autor:</lable> 
+		<input type="text" id="searchBoxAuthor" class="form-control" name="author" placeholder="in Tags suchen">
+		<div class="form-group"><input type="submit" class="btn" value="Suchen" ></div>	
+	</form>
+{% endblock %}

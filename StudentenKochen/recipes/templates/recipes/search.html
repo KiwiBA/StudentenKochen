@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	<form action="{% url 'recipes:search' %}" method="get">
-	<input type="text" id="searchBox" class="input-medium search-query" name="q" placeholder="Suchbegriffe eingeben">
-	<input type="submit" class="btn" value="Suchen" >
-	</form>
 	{% if query_string %}
 		<h1>Du hast nach "{{query_string}}" gesucht.</h1> 
 		{% if found_entries %}

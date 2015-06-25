@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^comment/(?P<recipe_id>\d+)/$', views.comment, name='comment'),
     url(r'^ownRecipes/$', views.ownRecipes, name='ownRecipes'),
     url(r'^search/$', views.search, name='search'),
+    url(r'^extendedSearch/$', views.extendedSearch, name='extendedSearch'),
 ]

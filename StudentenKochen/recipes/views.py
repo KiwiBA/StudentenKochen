@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.views import generic
@@ -113,6 +113,36 @@ def ownRecipes(request):
     
     return render(request, 'recipes/ownRecipe.html', {'recipe_list': recipes})
 
+def extendedSearch(request):
+    query_string_title = None
+    query_string_ingredient = None
+    query_string_tag = None 
+    query_string_author = None
+    found_entries = None
+    query_string = ''
+    
+    if ('title' in request.GET) or ('ingredient' in request.GET) or ('tag' in request.GET) or ('author' in request.GET):
+        query_string_title = request.GET['title']
+        query_string_ingredient = request.GET['ingredient']
+        query_string_tag = request.GET['tag']
+        query_string_author = request.GET['author']
+        query_string = query_string_title + " " + query_string_ingredient + " " + query_string_tag + " " + query_string_author
+        print(query_string_title + query_string_ingredient+query_string_tag+query_string_author)
+        unordered_query = make_extended_query(query_string_title, query_string_ingredient, query_string_tag, query_string_author)
+        print(unordered_query)     
+        found_entries = unordered_query.order_by('-pub_date')
+        print(found_entries)
+    if query_string_title==None and query_string_ingredient ==None and query_string_tag == None and query_string_author ==None:    
+        return render(request, 'recipes/extendedSearch.html')
+    else:
+        return render(request, 'recipes/search.html', { 'query_string':query_string,  'found_entries': found_entries})
+#     return render_to_response('recipes/extendedSearch.html',
+#                           { 'query_string': query_string, 'found_entries': found_entries },
+#                           context_instance=RequestContext(request))
+
+    
+    #return HttpResponseRedirect('recipes/search.html', { 'query_string': query_string, 'found_entries': found_entries })
+
 def search(request):
     query_string = ''
     found_entries = None
@@ -121,11 +151,12 @@ def search(request):
     if ('q' in request.GET) and request.GET['q'].strip():
         query_string = request.GET['q']
         
-        unordered_query = make_query(query_string, ['recipename', 'description', 'tags.tagname', 'ingredients.name'])         
+        unordered_query = make_query(query_string, ['recipename', 'description', 'tags.tagname', 'ingredients.name'])    
+        print(unordered_query)     
         found_entries = Recipe.objects.filter(unordered_query).order_by('-pub_date')
 
     return render(request, 'recipes/search.html', {'query_string': query_string, 'found_entries': found_entries})
-
+    
 def make_query(query_string, search_fields):
     #regular expressions um die suchwoerter zu trennen
     findterms = re.compile(r'"([^"]+)"|(\S+)').findall
@@ -147,3 +178,9 @@ def make_query(query_string, search_fields):
         else:
             query = query & or_query
     return query
+
+def make_extended_query(query_string_title, query_string_ingredient, query_string_tag, query_string_author):
+    q = None
+    q = Recipe.objects.filter(recipename__icontains=query_string_title, tags__tagname__icontains= query_string_tag, 
+           ingredients__name__icontains= query_string_ingredient, author__name__icontains= query_string_author).distinct()
+    return q
