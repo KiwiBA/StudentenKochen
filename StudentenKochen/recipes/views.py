@@ -66,7 +66,7 @@ def create(request):
         
         setTags(recipe, request.POST.get('tag').split(","))
         
-        recipe.pic = request.FILES['pic']
+        #recipe.pic = request.FILES['pic']
         recipe.save()
         return HttpResponseRedirect(recipe.get_absolute_url())
     return render(request, 'recipes/create.html')
@@ -81,17 +81,16 @@ def edit(request, recipe_id):
     if request.method == 'POST':
         recipe.recipename = request.POST.get('recipename')
         recipe.description = request.POST.get('description')
-        
-        editRecipeIngredients(request, recipe)
         setTags(recipe, request.POST.get('tag').split(","))
-        
+        editRecipeIngredients(request, recipe)
         recipe.save()
         return HttpResponseRedirect(recipe.get_absolute_url())
     
+    recipeTags = getTags(recipe)
     recipeIngredients = Recipeingredients.objects.filter(recipe=recipe)
     
        
-    return render(request, 'recipes/edit.html', {'recipe': recipe, 'recipeIngredients': recipeIngredients})
+    return render(request, 'recipes/edit.html', {'recipe': recipe, 'recipeIngredients': recipeIngredients, 'recipeTags':recipeTags})
 
 @login_required
 def delete(request, recipe_id):
@@ -129,6 +128,7 @@ def comment(request, recipe_id):
         
     return HttpResponseRedirect(recipe.get_absolute_url())
 
+@login_required 
 def ownRecipes(request):
     author = request.user.student
     print(author.name)

@@ -72,7 +72,15 @@ def editRecipeIngredients(request, recipe):
                 x.quantity = quantity
             x.save()
             
-            
+def getTags(recipe):
+    tags = Tag.objects.filter(recipe=recipe)
+    tag_str = ""
+    for tag in tags:
+        tag_str += tag.tagname + ", " 
+    
+    return tag_str[:-2] 
+    
+     
 def make_query(query_string, search_fields):
     #regular expressions um die suchwoerter zu trennen
     findterms = re.compile(r'"([^"]+)"|(\S+)').findall
