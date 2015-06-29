@@ -8,10 +8,11 @@ from django.views import generic
 from django.db.models import Q #for complex queries
 import re #regular expressions
 
-from .models import Recipe, Rating, Comment
-from recipes.forms import RecipeForm
+
+from .models import Recipe, Rating, Comment, Tag
 from recipes.models import Recipeingredients
 from _overlapped import NULL
+from .helperfunctions import *
 
 class IndexView(generic.ListView):
     template_name = 'recipes/index.html'
@@ -54,34 +55,22 @@ def detail(request, recipe_id):
 @login_required
 def create(request):
     if request.method == 'POST':
-        form = RecipeForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            recipe = form.save()
-            
-            return HttpResponseRedirect(recipe.get_absolute_url())
-    else:
-        form = RecipeForm()
+        recipe = Recipe()
+        recipe.recipename = request.POST.get('recipename')
         
-    return render(request, 'recipes/create.html', {'form': form, 'add': True})
+        recipe.author = request.user.student
+        recipe.description = request.POST.get('description')
+        recipe.save()
+        setRecipeIngredients(request, recipe)
+        
+        setTags(recipe, request.POST.get('tag').split(","))
+        recipe.save()
+        return HttpResponseRedirect(recipe.get_absolute_url())
+    return render(request, 'recipes/create.html')
 
 @login_required
 def edit(request, recipe_id):
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
-    if recipe.author != request.user.student and not request.user.is_staff:
-        
-        return HttpResponseForbidden()
-    
-    if request.method == 'POST':
-        form = RecipeForm(instance=recipe, data=request.POST)
-        if form.is_valid():
-            form.save()
-            
-            return HttpResponseRedirect(recipe.get_absolute_url())
-    else:
-        form = RecipeForm(instance=recipe)
-        
-    return render(request, 'recipes/create.html',
-        {'form': form, 'add': False, 'object': recipe})
+   pass
 
 @login_required     
 def rate(request, recipe_id):

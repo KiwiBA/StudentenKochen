@@ -110,10 +110,15 @@ USE_TZ = True
 STATIC_PATH = os.path.join(PROJECT_PATH,'static')
 
 STATIC_URL = '/static/' # You may find this is already defined as such.
+MEDIA_ROOT = os.path.join(PROJECT_PATH,'pic_folder')
 
 STATICFILES_DIRS = (
     STATIC_PATH,
+    MEDIA_ROOT,
 )
+
+
+
 
 LOGGING = {
     'version': 1,

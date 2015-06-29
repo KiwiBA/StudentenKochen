@@ -3,6 +3,8 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from user_auth.models import Student
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 class Ingredient(models.Model):
     id = models.AutoField(primary_key=True)
@@ -17,6 +19,10 @@ class Tag(models.Model):
     
     def __str__(self):
         return self.tagname
+
+def generate_filename(instance, filename):
+    ext = filename.split('.')[-1]
+    return 'pic_folder/' + str(int(time())) + '.' + ext
     
 class Recipe(models.Model):
     id = models.AutoField(primary_key=True)
@@ -26,6 +32,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(Ingredient, through='Recipeingredients')
     description = models.CharField(max_length=20000)
     tags = models.ManyToManyField(Tag)
+    pic = models.ImageField (upload_to="pic_folder/") 
     
     def save(self, *args, **kwargs):
         if not self.id:
@@ -44,7 +51,8 @@ class Recipe(models.Model):
     def get_absolute_url(self):
         return ('recipes:detail', (), {'recipe_id': self.id})
 
-
+    
+    
     
 class Recipeingredients(models.Model):
     id = models.AutoField(primary_key=True)
