@@ -1,5 +1,26 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block content %}
-<h1>Startseite</h1>
+	
+	{% if messages %}
+		{% for message in messages %}
+			<div style="height:15px" class="alert alert-success" role="alert">    
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endif %}
+	
+	<h1>Top 10 Rezepte</h1>
+	
+	{% if recipe_list %}
+ 	<ul class="recipes">
+	    {% for recipe in recipe_list %}
+	    	<a href="{% url 'recipes:detail' recipe.id %}">{{ recipe.recipename }}</a> von <i>{{recipe.author}}</i><br />
+	    {% endfor %}
+		</ul>
+	{% else %}
+    	<p>No recipe are available.</p>
+	{% endif %}
 {% endblock %}

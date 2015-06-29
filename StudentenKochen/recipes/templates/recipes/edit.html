@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}
+	{{ block.super }} - Rezept "{{recipe.name}}"  bearbeiten
+{% endblock %}
+	
+{% block content %}
+	<h2>Neues Rezept</h2>
+	<form action="{{ action_url }}" method="post" accept-charset="utf-8">
+		{{ form }}
+		{% csrf_token %}
+  		
+  		<div class="form-group">
+    		<label for="recipename">Rezept:</label>
+    		<input class="form-control" type="text" class="form-control" id="recipename"  name ="recipename" value="{{recipe.recipename}}">
+    	</div>   
+    	 		
+    	<br />
+    	<div class="form-group">
+    		<label >Zutaten und Mengenangabe:</label>
+    	</div>
+    	<fieldset name="quantity"  >
+    	{% for recipeIngredient in recipeIngredients %}
+		    <input value="{{recipeIngredient.quantity}}" class="form-control" name ="quantity{{recipeIngredient.id}}" type="text">	
+		
+		    <input value="{{recipeIngredient.ingredient}}"class="form-control" name= "ingredient{{recipeIngredient.id}}" type="text" ><br />	
+		{% endfor %}
+		</fieldset>
+		
+		<br />
+	
+		<div class="btn-group">
+			    <button id="add" onclick="myFunction() class="btn">
+			      <span class="icon-plus"></span>
+			    </button>
+		</div>
+		<br />
+  		<div class="form-group">
+		    <label for="description">Zubereitung:</label>
+		    <textarea class="form-control" id= "description" name = "description" placeholder="{{recipe.description}}"></textarea>
+ 		</div>
+ 		<br />
+ 		<div class="form-group">
+			<label for="tag">Tags:</label>
+		  	<input class="form-control" id="tag" name="tag" type="text" placeholder="Tag1, Tag2">
+		</div>
+ 		<br />
+		<div class="form-group">
+	    	<label for="fileInput">Bild hochladen</label>
+	   		<input type="file" id="fileInput">
+	  	</div>
+  		<br />
+  		<button type="submit" class="btn btn-primary" >Erstellen</button>
+	</form>
+	<script>
+		var countBox =1;
+		var boxName = 0;
+		function addInput()
+		{
+		     var boxName="textBox"+countBox; 
+			 document.getElementById('additionalq').innerHTML+='<br/><input type="text" id="'+boxName+'" value="'+boxName+'" "  /><br/>';
+		     countBox += 1;
+		}
+	</script>
+<br />
+<a href="{% url 'recipes:index' %}">zur&uuml;ck zur &Uuml;bersicht</a>
+{% endblock %}

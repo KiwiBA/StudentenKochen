@@ -21,7 +21,6 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_recipe_list'
 
     def get_queryset(self):
-        """Return the last five published recipes."""
         return Recipe.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:20]
     
 def detail(request, recipe_id):
@@ -66,13 +65,33 @@ def create(request):
         setRecipeIngredients(request, recipe)
         
         setTags(recipe, request.POST.get('tag').split(","))
+        
+        recipe.pic = request.FILES['pic']
         recipe.save()
         return HttpResponseRedirect(recipe.get_absolute_url())
     return render(request, 'recipes/create.html')
 
 @login_required
 def edit(request, recipe_id):
-   pass
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    if recipe.author != request.user.student:
+        
+       return HttpResponseForbidden()
+    
+    if request.method == 'POST':
+        recipe.recipename = request.POST.get('recipename')
+        recipe.description = request.POST.get('description')
+        
+        editRecipeIngredients(request, recipe)
+        setTags(recipe, request.POST.get('tag').split(","))
+        
+        recipe.save()
+        return HttpResponseRedirect(recipe.get_absolute_url())
+    
+    recipeIngredients = Recipeingredients.objects.filter(recipe=recipe)
+    
+       
+    return render(request, 'recipes/edit.html', {'recipe': recipe, 'recipeIngredients': recipeIngredients})
 
 @login_required
 def delete(request, recipe_id):
@@ -81,8 +100,9 @@ def delete(request, recipe_id):
     if recipe.author != request.user.student and not request.user.is_staff:
         return HttpResponseForbidden()
     else:
+        
+        m = u"Rezept ''" + recipe.recipename + "'' gelöscht."
         recipe.delete()
-        m = u"Rezept gelöscht."
         messages.add_message(request, messages.SUCCESS, m)
         return render(request, 'recipes/index.html', {'latest_recipe_list': Recipe.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:20]})
     
@@ -130,21 +150,15 @@ def extendedSearch(request):
         query_string_tag = request.GET['tag']
         query_string_author = request.GET['author']
         query_string = query_string_title + " " + query_string_ingredient + " " + query_string_tag + " " + query_string_author
-        print(query_string_title + query_string_ingredient+query_string_tag+query_string_author)
+        
         unordered_query = make_extended_query(query_string_title, query_string_ingredient, query_string_tag, query_string_author)
-        print(unordered_query)     
+         
         found_entries = unordered_query.order_by('-pub_date')
-        print(found_entries)
+     
     if query_string_title==None and query_string_ingredient ==None and query_string_tag == None and query_string_author ==None:    
         return render(request, 'recipes/extendedSearch.html')
     else:
         return render(request, 'recipes/search.html', { 'query_string':query_string,  'found_entries': found_entries})
-#     return render_to_response('recipes/extendedSearch.html',
-#                           { 'query_string': query_string, 'found_entries': found_entries },
-#                           context_instance=RequestContext(request))
-
-    
-    #return HttpResponseRedirect('recipes/search.html', { 'query_string': query_string, 'found_entries': found_entries })
 
 def search(request):
     query_string = ''
@@ -160,30 +174,3 @@ def search(request):
 
     return render(request, 'recipes/search.html', {'query_string': query_string, 'found_entries': found_entries})
     
-def make_query(query_string, search_fields):
-    #regular expressions um die suchwoerter zu trennen
-    findterms = re.compile(r'"([^"]+)"|(\S+)').findall
-    normspace=re.compile(r'\s{2,}').sub
-    terms = [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)]
-    
-    query = None # Query to search for every search term 
-    for term in terms:
-        or_query = None # Query to search for a given term in each field
-        for field_name in search_fields:
-            field_name = field_name.replace(".", "__") #ersetze den punkt mit __ um auch in fremdschluesseln zu suchen
-            q = Q(**{"%s__icontains" % field_name: term})
-            if or_query is None:
-                or_query = q
-            else:
-                or_query = or_query | q
-        if query is None:
-            query = or_query
-        else:
-            query = query & or_query
-    return query
-
-def make_extended_query(query_string_title, query_string_ingredient, query_string_tag, query_string_author):
-    q = None
-    q = Recipe.objects.filter(recipename__icontains=query_string_title, tags__tagname__icontains= query_string_tag, 
-           ingredients__name__icontains= query_string_ingredient, author__name__icontains= query_string_author).distinct()
-    return q

@@ -3,6 +3,7 @@
 {% block content %}
 	<h2>Erweiterte Suche</h2>
 	<form action="{% url 'recipes:extendedSearch' %}" method="get">
+		{% csrf_token %}
 		<lable for="searchBoxTitle" style="float:left; display:block; width:15%;">Rezeptname:</lable>
 		<input type="text" id="searchBoxTitle" class="form-control" name="title" placeholder="im Titel suchen">
 		<br>

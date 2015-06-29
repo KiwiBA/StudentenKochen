@@ -1,5 +1,4 @@
 import datetime
-
 from django.db import models
 from django.utils import timezone
 from user_auth.models import Student
@@ -28,7 +27,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(Ingredient, through='Recipeingredients')
     description = models.CharField(max_length=20000)
     tags = models.ManyToManyField(Tag)
-    pic = models.ImageField (upload_to="pic_folder/", null=True) 
+    pic = models.ImageField (upload_to="pic_folder/", null=True, blank=True)
     
     def save(self, *args, **kwargs):
         if not self.id:
@@ -47,9 +46,6 @@ class Recipe(models.Model):
     def get_absolute_url(self):
         return ('recipes:detail', (), {'recipe_id': self.id})
 
-    
-    
-    
 class Recipeingredients(models.Model):
     id = models.AutoField(primary_key=True)
     ingredient = models.ForeignKey(Ingredient)
