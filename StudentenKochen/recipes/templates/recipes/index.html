@@ -3,6 +3,15 @@
 {% load staticfiles %}
 
 {% block content %}
+	
+	{% if messages %}
+		{% for message in messages %}
+			<div style="height:15px" class="alert alert-success" role="alert">    
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endif %}
+	
 	<h1>Top 10 Rezepte</h1>
 	
 	{% if latest_recipe_list %}

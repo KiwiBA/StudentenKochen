@@ -1,3 +1,5 @@
+# -*- coding: iso-8859-1 -*-
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
@@ -7,7 +9,7 @@ from django.utils import timezone
 from django.views import generic
 from django.db.models import Q #for complex queries
 import re #regular expressions
-
+from django.contrib import messages
 
 from .models import Recipe, Rating, Comment, Tag
 from recipes.models import Recipeingredients
@@ -72,6 +74,18 @@ def create(request):
 def edit(request, recipe_id):
    pass
 
+@login_required
+def delete(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    
+    if recipe.author != request.user.student and not request.user.is_staff:
+        return HttpResponseForbidden()
+    else:
+        recipe.delete()
+        m = u"Rezept gelöscht."
+        messages.add_message(request, messages.SUCCESS, m)
+        return render(request, 'recipes/index.html', {'latest_recipe_list': Recipe.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:20]})
+    
 @login_required     
 def rate(request, recipe_id):
     p = get_object_or_404(Recipe, pk=recipe_id)

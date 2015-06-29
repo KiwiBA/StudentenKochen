@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+	
 	<h1>{{recipe.recipename}}</h1> 
 	{% if recipe.author == user.student %}
-		<a href="{% url 'recipes:edit' recipe.id %}">Rezept bearbeiten</a> <br />
+		<a href="{% url 'recipes:edit' recipe.id %}">Rezept bearbeiten</a> <a href="{% url 'recipes:delete' recipe.id %}" onclick="return window.confirm('Rezept wirklich l&ouml;schen?');">Rezept l&ouml;schen</a> <br />
 	{% endif %}
 	<span class="sub-text"><i>Autor: {{recipe.author}}</i></span>
 	
