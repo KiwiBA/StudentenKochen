@@ -33,12 +33,13 @@
 		  	<input class="form-control" name="ingredient2" type="text" > <br />			
 		  	<input class="form-control" name="ingredient3" type="text" > <br />	
 		  	<input class="form-control" name="ingredient4" type="text" > <br />	
+		  	<spant id="addBox" >
 		 </fieldset>
 		
 		<div class="btn-group">
-			    <button id="add" onclick="myFunction()" class="btn">
-			      <span class="icon-plus"></span> 
-			    </button> 
+		    <button id="add" onclick="myFunction()" class="btn">
+		      <span class="icon-plus"></span> 
+		    </button> 
 		</div>
 		<br />
 		<br />
@@ -61,6 +62,16 @@
   		
   		<button type="submit" class="btn btn-primary" >Erstellen</button> <br />
 	</form>
-
-	<a href="{% url 'recipes:index' %}">zur&uuml;ck zur &Uuml;bersicht</a>
+	
+	<script>
+		var countBox =1;
+		var boxName = 0;
+		function addInput()
+		{
+		     var boxName="textBox"+countBox; 
+			 document.getElementById('addBox').innerHTML+='<br/><input type="text" id="'+boxName+'" value="'+boxName+'" "  /><br/>';
+		     countBox += 1;
+		}
+	</script>
+	<a href="home/index.html" >zur&uuml;ck zur &Uuml;bersicht</a>
 {% endblock %}

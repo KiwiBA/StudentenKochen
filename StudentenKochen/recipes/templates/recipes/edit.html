@@ -30,9 +30,9 @@
 		<br />
 	
 		<div class="btn-group">
-			    <button id="add" onclick="myFunction() class="btn">
-			      <span class="icon-plus"></span>
-			    </button>
+		    <button id="add" onclick="myFunction() class="btn">
+		      <span class="icon-plus"></span>
+		    </button>
 		</div>
 		<br />
   		<div class="form-group">
@@ -50,18 +50,8 @@
 	   		<input type="file" id="fileInput">
 	  	</div>
   		<br />
-  		<button type="submit" class="btn btn-primary" >Erstellen</button>
+  		<button type="submit" class="btn btn-primary" >Speichern</button>
 	</form>
-	<script>
-		var countBox =1;
-		var boxName = 0;
-		function addInput()
-		{
-		     var boxName="textBox"+countBox; 
-			 document.getElementById('additionalq').innerHTML+='<br/><input type="text" id="'+boxName+'" value="'+boxName+'" "  /><br/>';
-		     countBox += 1;
-		}
-	</script>
-<br />
-<a href="{% url 'recipes:index' %}">zur&uuml;ck zur &Uuml;bersicht</a>
+	<br />
+	<a href="home/index.html">zur&uuml;ck zur &Uuml;bersicht</a>
 {% endblock %}

@@ -128,13 +128,35 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename':  os.path.join(BASE_DIR, 'templates/logfiles/logfile.log'),
+            'formatter': 'simple',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
         },
     },
     'loggers': {
         'django.request': {
             'handlers': ['file'],
-            'level': 'DEBUG', 'ERROR'
+            'level': 'INFO',
             'propagate': True,
         },
+        'recipes': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+        'home': {
+            'handlers': ['file'],
+            'level': 'INFO',
+        },
+        'user_auth': {
+            'handlers': ['file'],
+            'level': 'INFO',
+        },
+                
     },
 }

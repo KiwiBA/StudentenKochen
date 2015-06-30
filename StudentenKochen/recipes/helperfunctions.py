@@ -1,10 +1,40 @@
-from recipes.models import Recipe, Tag, Recipeingredients, Ingredient
+from recipes.models import Recipe, Tag, Recipeingredients, Ingredient, Rating
 from lib2to3.fixer_util import String
 from _overlapped import NULL
 from django.db.models import Q #for complex queries
 import re #regular expressions
+
+def computeRatings(request, recipe):
+    """
+    Computes the rating average of the recipe.
+    """
+    ratings = Rating.objects.all().filter(recipe=recipe)
+    all_ratings = 0
+    count = 0
+    ratingOfCurrentUser = NULL
+    for rating in ratings:
+        all_ratings += rating.rating
+        count +=1
+    if count == 0:
+        rating_average = 0
+    else:
+        rating_average = all_ratings/count
+        
+    if request.user.is_authenticated(): 
+        #check if current user rated the recipe already and return the rating the user gave    
+        try:
+            userRating = ratings.filter(evaluator=request.user.student)[:1].get()
+        except (KeyError, Rating.DoesNotExist):
+            ratingOfCurrentUser = 0
+        else:
+            ratingOfCurrentUser = userRating.rating
+            
+    return rating_average, ratingOfCurrentUser
+
 def setTags(recipe, tagList):
-    
+    """
+    saves the Tags in Recipe object.
+    """
     existingTags = Tag.objects.all()
     recipe.tags.through.objects.filter(recipe=recipe).delete()
         
@@ -14,6 +44,7 @@ def setTags(recipe, tagList):
         for existingTag in existingTags:
             if tag.lower() == existingTag.tagname.lower():
                 is_existing = True
+        
         newTag = Tag()
         newTag.tagname = tag
         if is_existing == False:
@@ -25,6 +56,9 @@ def setTags(recipe, tagList):
             recipe.tags.add(newTag.id)
             
 def setRecipeIngredients(request, recipe):
+    """
+    Saves the current Ingredients and Quantity for Recipe.
+    """
     quantity_str = "quantity"
     ingredient_str = "ingredient"
     
@@ -51,6 +85,9 @@ def setRecipeIngredients(request, recipe):
                 ri.save()
                 
 def editRecipeIngredients(request, recipe):
+    """
+    Saves the current RecipeIngredients objects for the current recipe.
+    """
     recipeIngredients = Recipeingredients.objects.filter(recipe=recipe)
     quantity_str = "quantity"
     ingredient_str = "ingredient"
@@ -73,6 +110,9 @@ def editRecipeIngredients(request, recipe):
             x.save()
             
 def getTags(recipe):
+    """
+    Returns the tags in a string.
+    """
     tags = Tag.objects.filter(recipe=recipe)
     tag_str = ""
     for tag in tags:
@@ -82,29 +122,40 @@ def getTags(recipe):
     
      
 def make_query(query_string, search_fields):
-    #regular expressions um die suchwoerter zu trennen
+  
     findterms = re.compile(r'"([^"]+)"|(\S+)').findall
     normspace=re.compile(r'\s{2,}').sub
     terms = [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)]
     
-    query = None # Query to search for every search term 
+    query = None
     for term in terms:
-        or_query = None # Query to search for a given term in each field
+        or_query = None 
         for field_name in search_fields:
-            field_name = field_name.replace(".", "__") #ersetze den punkt mit __ um auch in fremdschluesseln zu suchen
+            field_name = field_name.replace(".", "__")
             q = Q(**{"%s__icontains" % field_name: term})
             if or_query is None:
                 or_query = q
             else:
                 or_query = or_query | q
+        
         if query is None:
             query = or_query
         else:
             query = query & or_query
+    
     return query
 
 def make_extended_query(query_string_title, query_string_ingredient, query_string_tag, query_string_author):
+    """
+    Makes an extended query for Recipe.
+    """
     q = None
-    q = Recipe.objects.filter(recipename__icontains=query_string_title, tags__tagname__icontains= query_string_tag, 
-           ingredients__name__icontains= query_string_ingredient, author__name__icontains= query_string_author).distinct()
+    q = Recipe.objects.filter(recipename__icontains =
+                              query_string_title, 
+                              tags__tagname__icontains = 
+                              query_string_tag, 
+                              ingredients__name__icontains =
+                              query_string_ingredient, 
+                              author__name__icontains = 
+                              query_string_author).distinct()
     return q   

@@ -27,7 +27,7 @@
 		<li>{{tag.tagname}}</li>
 	{% endfor %}<br />
 	
-	<p>Durchschnittliche Bewertung: <strong>{{ratings}}</strong><i> von </i>5</p> 
+	<p>Durchschnittliche Bewertung: <strong>{{ratings}}</strong> von 5</p> 
 
 	{% if user.is_authenticated %}
 		{% if not recipe.author == user.student  and ratingOfCurrentUser == 0%}
@@ -42,7 +42,7 @@
 			</form>
 		{% endif %}
 		{% if not ratingOfCurrentUser == 0%}
-			<p>Deine Bewertung zum Rezept ist {{ratingOfCurrentUser}}.</p>
+			<p>Deine Bewertung:{{ratingOfCurrentUser}}</p>
 		{% endif %}
 	{% endif %} 
 

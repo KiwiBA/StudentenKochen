@@ -4,7 +4,6 @@ from . import views
 
 # /recipes/
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^(?P<recipe_id>[0-9]+)/$', views.detail, name='detail'),
     url(r'^create/$', views.create, name='create'),
     url(r'^edit/(?P<recipe_id>\d+)/$', views.edit, name='edit'),
