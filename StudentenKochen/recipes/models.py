@@ -70,9 +70,6 @@ class Recipeingredients(models.Model):
     recipe = models.ForeignKey(Recipe)
     quantity = models.CharField(max_length=30)
     
-    class Meta:
-        auto_created = True
-    
     def __str__(self):
         """
         Returns the the string with quantity and ingredient.
