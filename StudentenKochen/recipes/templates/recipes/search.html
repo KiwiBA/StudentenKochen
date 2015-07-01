@@ -6,6 +6,11 @@
 		{% if found_entries %}
 			<ul class="recipes">
 	    	{% for recipe in found_entries %}
+	    		{% if recipe.pic %}
+					<img src="{{ recipe.pic.url }}" style="height:25px" />
+				{% elif not recipe.pic %}
+					<img src="{% static "img/kein_foto.png" %}" style="height:25px" />
+				{% endif %}
 	    		<a href="{% url 'recipes:detail' recipe.id %}">{{ recipe.recipename }}</a> von <i>{{recipe.author}}</i><br />
 	    	{% endfor %}
 			</ul>
