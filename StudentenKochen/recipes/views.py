@@ -111,14 +111,15 @@ def rate(request, recipe_id):
     """
     Saves the rating of the current user for the current recipe.
     """
-    p = get_object_or_404(Recipe, pk=recipe_id)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
     new_rating = Rating()
-    new_rating.recipe = p
+    new_rating.recipe = recipe
     new_rating.evaluator = request.user.student
     new_rating.rating = request.POST['rating']
     new_rating.save()
     
-    return HttpResponseRedirect(p.get_absolute_url())
+    recipe_logger.info("Rating for recipe %s was created succesfully", recipe.recipename)
+    return HttpResponseRedirect(recipe.get_absolute_url())
 
 @login_required    
 def comment(request, recipe_id):

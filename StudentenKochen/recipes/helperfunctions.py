@@ -57,7 +57,7 @@ def setTags(recipe, tagList):
             
 def setRecipeIngredients(request, recipe):
     """
-    Saves the current Ingredients and Quantity for Recipe.
+    Saves the current ingredients and quantity for Recipe.
     """
     quantity_str = "quantity"
     ingredient_str = "ingredient"
@@ -123,7 +123,9 @@ def getTags(recipe):
     
      
 def make_query(query_string, search_fields):
-  
+    """
+    Creates a query for recipe search.
+    """
     findterms = re.compile(r'"([^"]+)"|(\S+)').findall
     normspace=re.compile(r'\s{2,}').sub
     terms = [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)]
