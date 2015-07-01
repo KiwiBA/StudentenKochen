@@ -4,14 +4,7 @@
 
 {% block content %}
 	
-	{% if messages %}
-		{% for message in messages %}
-			<div style="height:15px" class="alert alert-success" role="alert">    
-				{{ message }}
-			</div>
-		{% endfor %}
-	{% endif %}
-	
+
 	<h2>Top 10 Rezepte</h2>
 	
 	{% if recipe_list %}
