@@ -16,5 +16,5 @@ urlpatterns = [
     #logout page
     url(r'logout/$', 'user_auth.views.LogoutRequest'),
     #start page
-     url(r'profile/$', 'user_auth.views.Profile'),  
+    url(r'profile/$', 'user_auth.views.profile'),   
 ]
