@@ -63,8 +63,8 @@ def setRecipeIngredients(request, recipe):
     ingredient_str = "ingredient"
     
     for x in range(1, 5):
-        i= request.POST.get(ingredient_str + str(x)).strip()
-        quantity = request.POST.get(quantity_str + str(x)).strip()
+        i= request.POST.get(ingredient_str + str(x))
+        quantity = request.POST.get(quantity_str + str(x))
         if  quantity and i:
             ri = Recipeingredients()
             existingIngredient = None
@@ -90,6 +90,7 @@ def editRecipeIngredients(request, recipe):
     Saves the current RecipeIngredients objects for the current recipe.
     """
     recipeIngredients = Recipeingredients.objects.filter(recipe=recipe)
+
     quantity_str = "quantity"
     ingredient_str = "ingredient"
     

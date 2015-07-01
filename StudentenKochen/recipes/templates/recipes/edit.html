@@ -19,21 +19,18 @@
     	<div class="form-group">
     		<label >Zutaten und Mengenangabe:</label>
     	</div>
-    	<fieldset name="quantity"  >
-    	{% for recipeIngredient in recipeIngredients %}
-		    <input value="{{recipeIngredient.quantity}}" class="form-control" name ="quantity{{recipeIngredient.id}}" type="text">	
 		
-		    <input value="{{recipeIngredient.ingredient}}"class="form-control" name= "ingredient{{recipeIngredient.id}}" type="text" ><br />	
+		<fieldset name="ingredients" >
+		{% for recipeIngredient in recipeIngredients %}
+			<input value="{{recipeIngredient.quantity}}" type="text" style="width:50px; margin-right:15px;" name ="quantity{{recipeIngredient.id}}" >		
+		  	<input value="{{recipeIngredient.ingredient}}" type="text" style="width:100px;" name= "ingredient{{recipeIngredient.id}}" > <br />		
 		{% endfor %}
-		</fieldset>
+		<input type="button" id="addButton" class="btn" value="Hinzuf&uuml;gen">	<br />	<br />	
+		  	<span id="addBoxq" >
+		 </fieldset>
 		
 		<br />
-	
-		<div class="btn-group">
-		    <button id="add" onclick="myFunction() class="btn">
-		      <span class="icon-plus"></span>
-		    </button>
-		</div>
+
 		<br />
   		<div class="form-group">
 		    <label for="description">Zubereitung:</label>

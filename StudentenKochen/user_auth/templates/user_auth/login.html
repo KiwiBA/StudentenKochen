@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="hero-unit">
+<div class="hero-unit" style="width:400px;">
     <h3>Login</h3>
 
     <div class="container">
@@ -9,9 +9,11 @@
         {% csrf_token %}
 
         {% if form.errors %}<p><strong>Bitte verbessere die folgenden Felder:</strong></p>{% endif %}
-        Username: <input type="text" class="input-block-level" placeholder="Username" name="username" value="" size="50" />
+        <label>Username</label>
+        <input type="text" class="input-block-level" placeholder="Username" name="username" style="width:150px;" />
         <br />
-        Password: <input type="password" class="input-block-level" placeholder="Password" name="password" value="" size="50" />
+        <label>Username</label>
+        <input type="password" class="input-block-level" placeholder="Password" name="password" style="width:150px;"/>
         <br />
         <button class="btn btn-primary" type="submit">Sign in</button>
     </form>
