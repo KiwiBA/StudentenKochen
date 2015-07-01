@@ -67,8 +67,9 @@ def setRecipeIngredients(request, recipe):
         quantity = request.POST.get(quantity_str + str(x)).strip()
         if  quantity and i:
             ri = Recipeingredients()
+            existingIngredient = None
             existingIngredient = Ingredient.objects.filter(name=i)
-            if existingIngredient is not None:
+            if not len(existingIngredient) == 0 :
                 for ingredient in existingIngredient:
                     ri.ingredient = ingredient
                     ri.recipe = recipe
@@ -97,7 +98,7 @@ def editRecipeIngredients(request, recipe):
         quantity = request.POST.get(quantity_str + str(x.id)).strip()
         if  quantity and i:
             existingIngredient = Ingredient.objects.filter(name=i)
-            if existingIngredient is not None:
+            if not len(existingIngredient) == 0:
                 for ingredient in existingIngredient:
                     x.ingredient = ingredient
                     x.quantity = quantity
