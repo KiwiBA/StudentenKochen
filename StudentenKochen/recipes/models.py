@@ -10,9 +10,6 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=200)
     
     def __str__(self):
-        """
-        Returns the the name of ingredient.
-        """
         return self.name
     
 class Tag(models.Model):
@@ -20,9 +17,6 @@ class Tag(models.Model):
     tagname = models.CharField(max_length=30)
     
     def __str__(self):
-        """
-        Returns the the name of tag.
-        """
         return self.tagname
     
 class Recipe(models.Model):
@@ -33,35 +27,23 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(Ingredient, through='Recipeingredients')
     description = models.CharField(max_length=20000)
     tags = models.ManyToManyField(Tag)
-    pic = models.ImageField (upload_to="pic_folder/", null=True, blank=True)
+    pic = models.ImageField(upload_to="pic_folder/", null=True, blank=True)
     
     def save(self, *args, **kwargs):
-        """
-        Saves the recipe with current date.
-        """
         if not self.id:
             self.pub_date= timezone.now()
         super(Recipe, self).save(*args, **kwargs)
     
     def __str__(self):
-        """
-        Returns the the name of recipe.
-        """
         return self.recipename
     
     # returns true if recipes is published within the last 24 hours.
     def was_published_recently(self):
-        """
-        Returns the current publish date.
-        """
         now = timezone.now()
         return  now - datetime.timedelta(days=1) <= self.pub_date <= now
     
     @models.permalink
     def get_absolute_url(self):
-        """
-        Returns the absolute url of the recipe.
-        """
         return ('recipes:detail', (), {'recipe_id': self.id})
 
 class Recipeingredients(models.Model):
@@ -69,11 +51,10 @@ class Recipeingredients(models.Model):
     ingredient = models.ForeignKey(Ingredient)
     recipe = models.ForeignKey(Recipe)
     quantity = models.CharField(max_length=30)
+    class Meta:
+        auto_created = True
     
     def __str__(self):
-        """
-        Returns the the string with quantity and ingredient.
-        """
         return self.quantity + " " + self.ingredient.name
 
 class Comment(models.Model):
@@ -83,9 +64,6 @@ class Comment(models.Model):
     comment = models.CharField(max_length=2000)
     
     def __str__(self):
-        """
-        Returns the the the name of the recipe which was commented.
-        """
         return "a comment for " + self.recipe.recipename
     
 class Rating(models.Model):
@@ -102,7 +80,4 @@ class Rating(models.Model):
     rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, default=3)
     
     def __str__(self):
-        """
-        Returns the the the name of the recipe which was rated.
-        """
         return "a rating for " + self.recipe.recipename

@@ -6,7 +6,12 @@
 	{% if recipe.author == user.student %}
 		<a href="{% url 'recipes:edit' recipe.id %}">Rezept bearbeiten</a> <a href="{% url 'recipes:delete' recipe.id %}" onclick="return window.confirm('Rezept wirklich l&ouml;schen?');">Rezept l&ouml;schen</a> <br />
 	{% endif %}
-	<span class="sub-text"><i>Autor: {{recipe.author}}</i></span>
+	<span class="sub-text"><i>am {{recipe.pub_date}} erstellt von {{recipe.author}}</i></span>
+	{% if recipe.pic %}
+		<div><img src="{{ recipe.pic.url }}" style="height:150px" /></div>
+	{% elif not recipe.pic %}
+		<div><img src="{% static "img/kein_foto.png" %}" style="height:90px" /></div>
+	{% endif %}
 	
 	<h5>Zutaten:</h5>
 	<ul>

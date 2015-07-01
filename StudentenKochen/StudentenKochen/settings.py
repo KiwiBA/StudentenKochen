@@ -96,7 +96,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'de-de'
 
 TIME_ZONE = 'UTC'
 
@@ -111,6 +111,7 @@ STATIC_PATH = os.path.join(PROJECT_PATH,'static')
 
 STATIC_URL = '/static/' # You may find this is already defined as such.
 MEDIA_ROOT = os.path.join(PROJECT_PATH,'pic_folder')
+MEDIA_URL='/recipeimg/'
 
 STATICFILES_DIRS = (
     STATIC_PATH,

@@ -7,8 +7,6 @@ from django.shortcuts import get_object_or_404, render, render_to_response, redi
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.views import generic
-from django.db.models import Q #for complex queries
-import re #regular expressions
 from django.contrib import messages
 import logging
 from .models import Recipe, Rating, Comment, Tag
@@ -52,6 +50,8 @@ def create(request):
         setTags(recipe, request.POST.get('tag').split(","))
        
         recipe_logger.info("Recipe %s was created successfully", recipe.recipename)
+        if 'pic' in request.FILES:
+            recipe.pic = request.FILES['pic']
         recipe.save()
         return HttpResponseRedirect(recipe.get_absolute_url())
     
@@ -66,13 +66,15 @@ def edit(request, recipe_id):
     recipe_logger.info("EditView was called for recipe %s", recipe.recipename)
     
     if recipe.author != request.user.student:
-       return HttpResponseForbidden()
+        return HttpResponseForbidden()
     
     if request.method == 'POST':
         recipe.recipename = request.POST.get('recipename')
         recipe.description = request.POST.get('description')
         setTags(recipe, request.POST.get('tag').split(","))
         editRecipeIngredients(request, recipe)
+        if 'edit_pic' in request.FILES:
+            recipe.pic = request.FILES['edit_pic']
         recipe.save()
         recipe_logger.info("Recipe %s was edited successfully", recipe.recipename)
         return HttpResponseRedirect(recipe.get_absolute_url())

@@ -6,7 +6,7 @@
 	
 {% block content %}
 	<h2>Rezept bearbeiten</h2>
-	<form action="{{ action_url }}" method="post" accept-charset="utf-8">
+	<form action="{{ action_url }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 		{{ form }}
 		{% csrf_token %}
   		
@@ -46,8 +46,12 @@
 		</div>
  		<br />
 		<div class="form-group">
-	    	<label for="fileInput">Bild hochladen</label>
-	   		<input type="file" id="fileInput">
+	    	{% if recipe.pic %}
+				<div><img src="{{ recipe.pic.url }}" style="height:150px" /></div>
+			{% elif not recipe.pic %}
+				<label for="fileInput">Bild hochladen</label>
+	   			<input type="file" id="pic_id" name="edit_pic">
+			{% endif %}
 	  	</div>
   		<br />
   		<button type="submit" class="btn btn-primary" >Speichern</button>
