@@ -7,6 +7,9 @@ from .models import Student
 from django.contrib.auth import authenticate, login, logout
 
 def StudentRegistration(request):
+    """
+    Provides the registration form and saves the data of the registration.
+    """
     if request.user.is_authenticated():
         return HttpResponseRedirect('/')
     if request.method == 'POST':
@@ -28,7 +31,7 @@ def StudentRegistration(request):
     
 def LoginRequest(request):
     """
-    Shows
+    Provides the login Form and authenticates the user.
     """
     if request.user.is_authenticated():
         return HttpResponseRedirect('/profile/')
@@ -54,9 +57,14 @@ def LoginRequest(request):
         return render_to_response('user_auth/login.html', context, context_instance=RequestContext(request))
     
 def LogoutRequest(request):
+    """
+    User logged out.
+    """
     logout(request) 
-    print("logged out")
     return HttpResponseRedirect('/')
 
 def profile(request):
+    """
+    Redirects to the profile of the logged user.
+    """
     return render(request, 'user_auth/profile.html')
