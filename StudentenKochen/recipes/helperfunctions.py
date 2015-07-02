@@ -62,28 +62,32 @@ def setRecipeIngredients(request, recipe):
     quantity_str = "quantity"
     ingredient_str = "ingredient"
     
-    for x in range(1, 5):
-        i= request.POST.get(ingredient_str + str(x))
-        quantity = request.POST.get(quantity_str + str(x))
-        if  quantity and i:
-            ri = Recipeingredients()
-            existingIngredient = None
-            existingIngredient = Ingredient.objects.filter(name=i)
-            if not len(existingIngredient) == 0 :
-                for ingredient in existingIngredient:
+    for x in range(1, 12):
+        try:
+            i= request.POST.get(ingredient_str + str(x))
+            quantity = request.POST.get(quantity_str + str(x))
+        
+            if  quantity and i:
+                ri = Recipeingredients()
+                existingIngredient = None
+                existingIngredient = Ingredient.objects.filter(name=i)
+                if not len(existingIngredient) == 0 :
+                    for ingredient in existingIngredient:
+                        ri.ingredient = ingredient
+                        ri.recipe = recipe
+                        ri.quantity = quantity
+                        ri.save()
+                        
+                else:
+                    ingredient = Ingredient()
+                    ingredient.name = i
+                    ingredient.save()
                     ri.ingredient = ingredient
                     ri.recipe = recipe
                     ri.quantity = quantity
                     ri.save()
-                    
-            else:
-                ingredient = Ingredient()
-                ingredient.name = i
-                ingredient.save()
-                ri.ingredient = ingredient
-                ri.recipe = recipe
-                ri.quantity = quantity
-                ri.save()
+        except:
+            return
                 
 def editRecipeIngredients(request, recipe):
     """

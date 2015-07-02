@@ -48,7 +48,7 @@ def create(request):
         
         setRecipeIngredients(request, recipe)
         setTags(recipe, request.POST.get('tag').split(","))
-       
+        
         recipe_logger.info("Recipe %s was created successfully", recipe.recipename)
         if 'pic' in request.FILES:
             recipe.pic = request.FILES['pic']
