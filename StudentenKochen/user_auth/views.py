@@ -19,7 +19,7 @@ def StudentRegistration(request):
 
             return HttpResponseRedirect('/login/')
         else:
-            return render_to_response('register.html', {'form': form}, context_instance=RequestContext(request))
+            return render_to_response('user_auth/register.html', {'form': form}, context_instance=RequestContext(request))
     else: 
         """user is not submitting the form, show them a blank registration form"""
         form = RegistrationForm()

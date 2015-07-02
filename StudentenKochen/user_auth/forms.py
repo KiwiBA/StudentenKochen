@@ -22,8 +22,11 @@ class RegistrationForm(ModelForm):
         raise forms.ValidationError("Username wird bereits verwendet")
     
     def clean(self):
-        if self.cleaned_data['password'] != self.cleaned_data['password1']:
-            raise forms.ValidationError("Passwort stimmt nicht ueberein. Bitte versuche es erneut.")
+        try:
+            if self.cleaned_data['password'] != self.cleaned_data['password1']:
+                raise forms.ValidationError("Passwort stimmt nicht &uuml;berein. Bitte versuche es erneut.")
+        except:
+            return self.cleaned_data
         return self.cleaned_data
     
 class LoginForm(forms.Form):
